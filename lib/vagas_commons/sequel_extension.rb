@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'sequel_extension/no_lock_table_plugin'
 require_relative 'sequel_extension/no_lock_hack'
 

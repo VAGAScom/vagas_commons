@@ -1,8 +1,23 @@
+# frozen_string_literal: true
+
 require 'vagas_commons/version'
 
-require 'vagas_commons/validation' if defined?(Rails)
+require 'logger'
+require 'dry-configurable'
+
+require 'vagas_commons/validation' if defined?(Rails) && defined?(Dry::Validation)
 require 'vagas_commons/sequel_extension' if defined?(Sequel)
+require 'vagas_commons/requests' if defined?(Typhoeus)
 
 module VagasCommons
-  # Your code goes here...
+  extend Dry::Configurable
+
+  setting :logger, Logger.new(STDOUT)
+  setting :request do
+    setting :user_agent, 'gem VAGAS Commons'
+  end
+
+  def self.logger
+    config.logger
+  end
 end

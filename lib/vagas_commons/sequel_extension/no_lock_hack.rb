@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module VagasCommons::NoLockHack
   def load_hack
     Sequel::Model.db.extend_datasets do
