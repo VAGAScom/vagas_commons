@@ -20,15 +20,19 @@ class VagasCommons::Requests
   def run(max_concurrency: 10)
     return self if requests.empty?
 
-    # if requests.size == 1
-    #   req = requests.values.first
-    #   req.request.run
-    # else
-    hydra = Typhoeus::Hydra.new(max_concurrency: max_concurrency)
-    requests.each_pair { |_key, req| hydra.queue(req.request) }
-    hydra.run
-    # end
+    if requests.size == 1
+      simple_run
+    else
+      hydra = Typhoeus::Hydra.new(max_concurrency: max_concurrency)
+      requests.each_pair { |_key, req| hydra.queue(req.request) }
+      hydra.run
+    end
     self
+  end
+
+  def simple_run
+    requester = requests.values.first
+    requester.request.run
   end
 
   def run_healthcheck

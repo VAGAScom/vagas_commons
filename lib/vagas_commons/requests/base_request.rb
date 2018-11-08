@@ -8,20 +8,27 @@ module VagasCommons::BaseRequest
 
   ##
   # Metodos necessarios serem implementados para executar a requisicao
+
+  ##
+  # Implementacao necessaria para indicar qual o host que deve ser alcancado
   def host
     raise MethodMissingError
   end
 
+  ##
+  # Implementacao necessaria para indicar qual o path da URL
   def service_path
     raise MethodMissingError
   end
 
+  ##
+  # Implementacao necessaria para tratamento do corpo da requisicao para
+  # transformar em um objeto, por padrao o body vem um hash
+  # O parametro +_body+ representa um json em formato objeto hash do retorno
+  # da API
+  # O parametro +_response+ e o objeto de retorno da requisicao
   def as_object(_body, _response)
     raise MethodMissingError
-  end
-
-  def user_agent
-    VagasCommons.config.request.user_agent
   end
 
   ##
@@ -41,6 +48,10 @@ module VagasCommons::BaseRequest
 
   def headers
     {}
+  end
+
+  def user_agent
+    VagasCommons.config.request.user_agent
   end
 
   ##

@@ -13,7 +13,7 @@ gem.
 Adicione essa senha no Gemfile da sua aplicação
 
 ```ruby
-gem 'vagas_commons', git: 'https://bitbucket.org/vagas/vagas_commons'
+gem 'vagas_commons', github: 'VAGAScom/vagas_commons'
 ```
 
 E então execute:
@@ -73,7 +73,8 @@ Para habilitar essa operação, é preciso estar usando a ```gem Sequel``` e log
 inicialização do Sequel executar o comando:
 
 ```ruby
-VagasCommons::Sequel.load
+# Pode indicar a inicializar por essa linha de comando
+VagasCommons::Sequel.init
 ```
 
 Por exemplo, numa aplicação Rails, você pode ter um arquivo na pasta
@@ -92,15 +93,105 @@ Sequel::Model.plugin :validation_helpers
 Sequel::Model.require_valid_table = false
 Sequel::Model.db.logger = Rails.logger
 
-VagasCommons::Sequel.load
+VagasCommons::Sequel.init
 ```
 
 ### Requisições HTTP Externas
 
-Esse disponibiliza uma estrutura para criar classes responsáveis por
-requisições HTTP e objetos usando a ```gem typhoeus```.
-Também para simplificar as multiplas requisições HTTPs fazendo em paralelo usando o recurso Hydra da ```gem typhoeus```
+Esta funcionalidade disponibiliza uma estrutura para criar classes responsáveis por requisições HTTP e objetos usando a ```gem typhoeus```.
+Também para simplificar as multiplas requisições HTTPs fazendo em paralelo usando o recurso Hydra da ```gem typhoeus```.
 
+Para utilizar:
+
+
+```ruby
+# Criar uma classe que responda pelas informacoes de requisicao
+class MyServiceRequest
+  extend VagasCommons::BaseRequest
+
+  # Implementar os metodos necessarios para identificar os dados da requisicao
+  def host
+    'http://subdomain.domain.com'
+  end
+
+  def service_path
+    '/v1/servico'
+  end
+
+  def as_object(body, response)
+    # Como transformar o retorno em objeto?
+    MeuObjeto.new(body)
+  end
+
+  # Opcionalmente voce pode indicar informacoes extras
+
+  # Qual o User-Agent da requisicao.
+  # Também pode ser indicado na configuracao da gem (ver mais abaixo)
+  def user_agent
+    'Minha API'
+  end
+
+  # Se deseja pssar parametros via URL, pode ser indicado um HASH
+  def parameters
+    { user: 'name', passwd: 'changeit' }
+  end
+
+  # Enviar um corpo numa requisicao do tipo POST
+  def request_body
+    { user: 'name', passwd: 'changeit' }
+  end
+
+  # Definir o metodo de envio da requisicao
+  def method
+    :get
+  end
+
+  # Adicionar informacoes extras no Header
+  def headers
+    { 'Content-type' => 'application/json' }
+  end
+end
+```
+
+Para executar as chamadas utilizando a estrutura, basta compor as requisições
+
+```ruby
+my_requests = {
+  req1: MyServiceRequest.new,
+  req2: MyServiceRequest.new
+}
+
+# Passa os objetos de requisicoes
+requests = VagasCommons::Requests.new(my_requests)
+
+# Execucao em paralelo acontecendo
+requests.run
+
+# Recupera cada requisicao pela chave informada
+request = requests[:req1]
+
+# Algumas informacoes que podem ser obtidas da requisicao
+
+request.object
+request.http_body
+request.status
+request.success?
+request.response
+```
+
+### Configurações disponíveis pela gem
+
+Algumas informações podem ser configuradas para uso das informações,
+
+```ruby
+VagasCommons.configure do |config|
+  # Indicar para uso do logger por outro meio de saída
+  config.logger = Logger.new(STDOUT)
+
+  # Indicar qual o agent de requisições HTTP padrão
+  config.request.user_agent = 'Um novo agent'
+end
+```
 
 ## Development
 

@@ -6,7 +6,7 @@ require_relative 'sequel_extension/no_lock_hack'
 module VagasCommons::Sequel
   extend VagasCommons::NoLockHack
 
-  def self.load
+  def self.init
     Sequel::Model.plugin :no_lock_table
     load_hack
   end
