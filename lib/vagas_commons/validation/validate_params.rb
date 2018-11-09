@@ -9,7 +9,7 @@ module VagasCommons::ValidateParams
     action = params['action'].to_sym
     block = self.class.defined_validations[action]
 
-    validation = block ? block.call : Dry::Validation.Form(VagasCommons::BasicSchema)
+    validation = block ? block.call : Dry::Validation.Params(VagasCommons::BasicSchema)
 
     validated = validation.call(params.to_unsafe_h)
 
