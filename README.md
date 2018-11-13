@@ -107,7 +107,7 @@ Para utilizar:
 ```ruby
 # Criar uma classe que responda pelas informacoes de requisicao
 class MyServiceRequest
-  extend VagasCommons::BaseRequest
+  include VagasCommons::BaseRequest
 
   # Implementar os metodos necessarios para identificar os dados da requisicao
   def host

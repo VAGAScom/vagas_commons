@@ -16,6 +16,9 @@ module VagasCommons
   setting :request do
     setting :user_agent, 'gem VAGAS Commons'
   end
+  setting :requests do
+    setting :typhoeus_max_concurrency, 10
+  end
 
   def self.logger
     config.logger

@@ -54,6 +54,43 @@ module VagasCommons::BaseRequest
     VagasCommons.config.request.user_agent
   end
 
+  def status
+    response.code
+  end
+
+  def success?
+    response.success?
+  end
+
+  ##
+  # Metodos usados internamente para montar requisicao
+  def service_uri
+    "#{host}#{service_path}"
+  end
+
+  def request
+    Typhoeus::Request
+      .new(service_uri, request_options).tap do |req|
+        handle_request(req)
+      end
+  end
+
+  def request_healthcheck
+    request = Typhoeus::Request.new("#{host}/healthcheck", timeout: 5)
+    @healthcheck = {}
+    request.on_complete do |response|
+      healthcheck[:status] = response.code
+      healthcheck[:time] = response.total_time
+    end
+    request
+  end
+
+  private
+
+  def request_options
+    { method: method, params: parameters, body: request_body, headers: http_header }
+  end
+
   ##
   # Metodos disponiveis para recuperar as informacoes
   def http_body
@@ -69,56 +106,16 @@ module VagasCommons::BaseRequest
     { error: e.message, code: HTTP_UNPROCESSABLE_ENTITY }
   end
 
-  def status
-    response.code
-  end
-
-  def success?
-    response.success?
-  end
-
-  ##
-  # Metodos usados internamente para montar requisicao
-  def service_uri
-    "#{host}#{service_path}"
-  end
-
-  def request_options
-    { method: method, params: parameters, body: request_body, headers: http_header }
-  end
-
-  def request
-    Typhoeus::Request
-      .new(service_uri, request_options).tap do |req|
-        handle_request(req)
-      end
-  end
-
   def handle_request(request)
     request.on_complete do |response|
       @response = response
       if response.success?
         @object = as_object(http_body, response)
-        # elsif response.timed_out?
-        #   VagasCommons.logger.info('got a time out')
-        #   # Poderiamos tentar requisitar mais uma vez
       else
         log_error('HTTP-request-failed')
       end
     end
   end
-
-  def request_healthcheck
-    request = Typhoeus::Request.new("#{host}/healthcheck", timeout: 5)
-    @healthcheck = {}
-    request.on_complete do |response|
-      healthcheck[:status] = response.code
-      healthcheck[:time] = response.total_time
-    end
-    request
-  end
-
-  private
 
   def parse_json(body)
     if defined?(Oj)
