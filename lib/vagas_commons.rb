@@ -8,6 +8,7 @@ require 'dry-configurable'
 require 'vagas_commons/validation' if defined?(Rails) && defined?(Dry::Validation)
 require 'vagas_commons/sequel_extension' if defined?(Sequel)
 require 'vagas_commons/requests' if defined?(Typhoeus)
+require 'vagas_commons/serializers' if defined?(ActiveModel::Serializer)
 
 module VagasCommons
   extend Dry::Configurable
