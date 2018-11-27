@@ -3,6 +3,7 @@
 # Classe que representa uma requisicao nula, para nao precisar tratar valores nulos
 class VagasCommons::EmptyRequest
   include VagasCommons::BaseRequest
+
   def service_uri
     raise 'Invalid request'
   end

@@ -8,6 +8,7 @@ require 'dry-configurable'
 require 'vagas_commons/validation' if defined?(Rails) && defined?(Dry::Validation)
 require 'vagas_commons/sequel_extension' if defined?(Sequel)
 require 'vagas_commons/requests' if defined?(Typhoeus)
+require 'vagas_commons/serializers' if defined?(ActiveModel::Serializer)
 
 module VagasCommons
   extend Dry::Configurable
@@ -15,6 +16,9 @@ module VagasCommons
   setting :logger, Logger.new(STDOUT)
   setting :request do
     setting :user_agent, 'gem VAGAS Commons'
+  end
+  setting :requests do
+    setting :max_concurrent, 10
   end
 
   def self.logger
