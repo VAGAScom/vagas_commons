@@ -17,7 +17,7 @@ class VagasCommons::Requests
     requests.fetch(key) { VagasCommons::EmptyRequest.new }
   end
 
-  def run(max_concurrency: max_concurrent_requests)
+  def run(max_concurrency: max_concurrent)
     return self if requests.empty?
 
     if requests.size == 1
@@ -38,7 +38,7 @@ class VagasCommons::Requests
   def run_healthcheck
     return :no_services if requests.empty?
 
-    hydra = Typhoeus::Hydra.new(max_concurrency: max_concurrent_requests)
+    hydra = Typhoeus::Hydra.new(max_concurrency: max_concurrent)
     requests.each_pair { |_key, req| hydra.queue(req.request_healthcheck) }
     hydra.run
     requests.map { |key, req| [key, req.healthcheck] }.to_h
@@ -46,7 +46,7 @@ class VagasCommons::Requests
 
   private
 
-  def max_concurrent_requests
-    VagasCommons.config.requests.max_concurrent_requests
+  def max_concurrent
+    VagasCommons.config.requests.max_concurrent
   end
 end

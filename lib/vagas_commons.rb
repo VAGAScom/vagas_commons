@@ -18,7 +18,7 @@ module VagasCommons
     setting :user_agent, 'gem VAGAS Commons'
   end
   setting :requests do
-    setting :max_concurrent_requests, 10
+    setting :max_concurrent, 10
   end
 
   def self.logger
