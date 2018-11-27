@@ -179,9 +179,29 @@ request.success?
 request.response
 ```
 
-### Configurações disponíveis pela gem
+### Serializers
 
-Algumas informações podem ser configuradas para uso das informações,
+Caso possua classes de serializer, utilizando a ```gem active_model_serializers```, é possível remover os atributos que tenham valor `nil`, incluindo o módulo ```VagasCommons::NullAttributesRemover```, da seguinte maneira:
+
+```ruby
+class MyModelSerializer < ActiveModel::Serializer
+  # Incluir módulo para remover atributos com valor nil
+  include VagasCommons::NullAttributesRemover
+
+  # Atributos do serializer
+  attributes :name, :email
+end
+
+render json: MyModel.new('John Doe', nil),
+       serializer: MyModelSerializer
+
+# Resultado:
+# => { "name": "John Doe" }
+```
+
+### Configurações disponíveis
+
+Algumas informações podem ser configuradas para uso da gem:
 
 ```ruby
 VagasCommons.configure do |config|
@@ -190,6 +210,9 @@ VagasCommons.configure do |config|
 
   # Indicar qual o agent de requisições HTTP padrão
   config.request.user_agent = 'Um novo agent'
+
+  # Quantidade máxima de requisições HTTP em paralelo
+  config.requests.max_concurrent = 10
 end
 ```
 
