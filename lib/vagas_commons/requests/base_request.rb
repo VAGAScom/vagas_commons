@@ -85,12 +85,6 @@ module VagasCommons::BaseRequest
     request
   end
 
-  private
-
-  def request_options
-    { method: method, params: parameters, body: request_body, headers: http_header }
-  end
-
   ##
   # Metodos disponiveis para recuperar as informacoes
   def http_body
@@ -104,6 +98,12 @@ module VagasCommons::BaseRequest
   rescue IOError => e
     log_error(e.message, code: HTTP_UNPROCESSABLE_ENTITY)
     { error: e.message, code: HTTP_UNPROCESSABLE_ENTITY }
+  end
+
+  private
+
+  def request_options
+    { method: method, params: parameters, body: request_body, headers: http_header }
   end
 
   def handle_request(request)
@@ -123,9 +123,7 @@ module VagasCommons::BaseRequest
     else
       JSON.parse(body)
     end
-  rescue Oj::ParseError
-    raise IOError, 'invalid-json-result-format'
-  rescue JSON::ParserError
+  rescue Oj::ParseError, JSON::ParserError
     raise IOError, 'invalid-json-result-format'
   end
 
