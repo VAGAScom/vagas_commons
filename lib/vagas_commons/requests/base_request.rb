@@ -21,6 +21,10 @@ module VagasCommons::BaseRequest
     raise MethodMissingError
   end
 
+  def healthcheck_path
+    'healthcheck'
+  end
+
   ##
   # Implementacao necessaria para tratamento do corpo da requisicao para
   # transformar em um objeto, por padrao o body vem um hash
@@ -79,8 +83,8 @@ module VagasCommons::BaseRequest
       end
   end
 
-  def request_healthcheck(healthcheck_path = 'healthcheck')
-    request = Typhoeus::Request.new("#{host}/#{healthcheck_path}", timeout: 5)
+  def request_healthcheck
+    request = Typhoeus::Request.new("#{host}/#{healthcheck_path || 'healthcheck' }", timeout: 5)
     @healthcheck = {}
     request.on_complete do |response|
       healthcheck[:status] = response.code
