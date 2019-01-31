@@ -103,7 +103,6 @@ Também para simplificar as multiplas requisições HTTPs fazendo em paralelo us
 
 Para utilizar:
 
-
 ```ruby
 # Criar uma classe que responda pelas informacoes de requisicao
 class MyServiceRequest
@@ -150,6 +149,22 @@ class MyServiceRequest
   def headers
     { 'Content-type' => 'application/json' }
   end
+
+  # Informar opções extras suportadas por uma requisição do Typhoeus
+  #
+  # Exemplo de algumas opções permitidas:
+  def options
+    { followlocation: true,
+      ssl_verifypeer: true,
+      ssl_verifyhost: 2,
+      verbose: true }
+  end
+
+  # Define a rota para verificação do status do host informado na classe.
+  # Valor padrão é "healthcheck"
+  def healthcheck_path
+    'health_status'
+  end
 end
 ```
 
@@ -177,6 +192,13 @@ request.http_body
 request.status
 request.success?
 request.response
+```
+
+Se você quiser chamar uma URL de verificação de status do host definido na classe `MyServiceRequest`,
+basta executar:
+
+```ruby
+requests.run_healthcheck
 ```
 
 ### Serializers

@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
+require 'forwardable'
+
 # Classe encapsula todas as requisicoes do Typhoeus e executa conforme a chamada
 class VagasCommons::Requests
+  extend Forwardable
+
   attr_reader :requests
-  delegate :map, to: :requests
+  def_delegators :requests, :map
 
   def initialize(requests = {})
     @requests = requests
