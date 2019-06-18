@@ -38,7 +38,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'dry-configurable'
-  spec.add_dependency 'dry-validation'
+  spec.add_dependency 'dry-validation', '~> 0.13.0'
   spec.add_dependency 'oj'
   spec.add_dependency 'oj_mimic_json'
   spec.add_dependency 'typhoeus'
