@@ -84,7 +84,7 @@ module VagasCommons::BaseRequest
   end
 
   def request_healthcheck
-    request = Typhoeus::Request.new("#{host}/#{healthcheck_path || 'healthcheck' }", timeout: 5)
+    request = Typhoeus::Request.new("#{host}/#{healthcheck_path || 'healthcheck' }", timeout: 3)
     @healthcheck = {}
     request.on_complete do |response|
       healthcheck[:status] = response.code
