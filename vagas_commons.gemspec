@@ -38,13 +38,16 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'dry-configurable'
-  spec.add_dependency 'dry-validation', '~> 0.13.0'
+  spec.add_dependency 'dry-validation', '~> 1.8.1'
+  spec.add_dependency 'dry-schema'
   spec.add_dependency 'oj'
   spec.add_dependency 'oj_mimic_json'
   spec.add_dependency 'typhoeus'
+  spec.add_dependency 'pry-byebug'
 
-  spec.add_development_dependency 'bundler', '~> 1.16'
-  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'bundler', '~> 2'
+  spec.add_development_dependency 'rake', '~> 13'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'pry-byebug'
 end

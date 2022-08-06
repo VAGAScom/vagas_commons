@@ -9,12 +9,12 @@ module VagasCommons::ValidateParams
     action = params['action'].to_sym
     block = self.class.defined_validations[action]
 
-    validation = block ? block.call : Dry::Validation.Params(VagasCommons::BasicSchema)
+    validation = block ? block.call : Dry::Validation::Contract() { params(VagasCommons::BasicSchema.schema) }
 
     validated = validation.call(params.to_unsafe_h)
 
     unless validated.success?
-      render_error(validated.messages(locale: I18n.locale), 412)
+      render_error(validated.errors.to_h, 412)
       return false
     end
     @valid_params = validated.output
