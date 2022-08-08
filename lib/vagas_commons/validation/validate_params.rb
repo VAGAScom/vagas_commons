@@ -17,7 +17,7 @@ module VagasCommons::ValidateParams
       render_error(validated.errors.to_h, 412)
       return false
     end
-    @valid_params = validated.output
+    @valid_params = validated.to_h
   end
 
   class << self; attr_accessor :defined_validations; end
