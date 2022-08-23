@@ -3,7 +3,7 @@
 class VagasCommons::CompanySchema < Dry::Validation::Contract
   config.messages.backend = :yaml
 
-  schema do
-    required(:empresa_id).filled(:int?)
+  params do
+    required(:empresa_id).value(:integer)
   end
 end
