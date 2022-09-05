@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    vagas_commons (0.2.2)
+    vagas_commons (0.3.0)
       dry-configurable
       dry-schema
       dry-validation (~> 1.8.1)
