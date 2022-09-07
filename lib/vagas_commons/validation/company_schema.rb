@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-class VagasCommons::CompanySchema < Dry::Validation::Schema
-  configure do |config|
-    config.messages = :i18n
-  end
+class VagasCommons::CompanySchema < Dry::Validation::Contract
+  config.messages.backend = :yaml
 
-  define! do
-    required(:empresa_id).filled(:int?)
+  params do
+    required(:empresa_id).value(:integer)
   end
 end

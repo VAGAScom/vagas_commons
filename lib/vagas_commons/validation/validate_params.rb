@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
+require_relative 'validation_instance'
+
 module VagasCommons::ValidateParams
   extend ActiveSupport::Concern
+  include VagasCommons::ValidationInstance
 
   attr_reader :valid_params
 
@@ -9,15 +12,15 @@ module VagasCommons::ValidateParams
     action = params['action'].to_sym
     block = self.class.defined_validations[action]
 
-    validation = block ? block.call : Dry::Validation.Params(VagasCommons::BasicSchema)
+    validation = get_validation_instance(block || VagasCommons::BasicSchema)
 
     validated = validation.call(params.to_unsafe_h)
 
     unless validated.success?
-      render_error(validated.messages(locale: I18n.locale), 412)
+      render_error(validated.errors.to_h, 412)
       return false
     end
-    @valid_params = validated.output
+    @valid_params = validated.to_h
   end
 
   class << self; attr_accessor :defined_validations; end

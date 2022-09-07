@@ -4,6 +4,8 @@ require 'vagas_commons/version'
 
 require 'logger'
 require 'dry-configurable'
+require 'dry-validation'
+require 'dry-schema'
 
 require 'vagas_commons/validation' if defined?(Rails) && defined?(Dry::Validation)
 require 'vagas_commons/sequel_extension' if defined?(Sequel)
@@ -23,5 +25,6 @@ module VagasCommons
 
   def self.logger
     config.logger
+    
   end
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-class VagasCommons::BasicSchema < Dry::Validation::Schema
-  configure do |config|
-    config.messages = :i18n
-  end
+class VagasCommons::BasicSchema < Dry::Validation::Contract
+  config.messages.backend = :yaml
+  schema {}
 end
