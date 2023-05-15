@@ -15,16 +15,15 @@ require 'vagas_commons/serializers' if defined?(ActiveModel::Serializer)
 module VagasCommons
   extend Dry::Configurable
 
-  setting :logger, Logger.new(STDOUT)
+  setting :logger, default: Logger.new($stdout)
   setting :request do
-    setting :user_agent, 'gem VAGAS Commons'
+    setting :user_agent, default: 'gem VAGAS Commons'
   end
   setting :requests do
-    setting :max_concurrent, 10
+    setting :max_concurrent, default: 10
   end
 
   def self.logger
     config.logger
-    
   end
 end
