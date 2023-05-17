@@ -226,15 +226,25 @@ render json: MyModel.new('John Doe', nil),
 Algumas informações podem ser configuradas para uso da gem:
 
 ```ruby
-VagasCommons.configure do |config|
+module VagasCommons
+  extend Dry::Configurable
+   
   # Indicar para uso do logger por outro meio de saída
-  config.logger = default: Logger.new($stdout)
-
+  setting :logger, default: Logger.new($stdout)
+  
   # Indicar qual o agent de requisições HTTP padrão
-  config.request.user_agent = default: 'Um novo agent'
-
+  setting :request do
+    setting :user_agent, default: 'Um novo agent'
+  end
+  
   # Quantidade máxima de requisições HTTP em paralelo
-  config.requests.max_concurrent = default: 10
+  setting :requests do
+    setting :max_concurrent, default: 10
+  end
+
+  def self.logger
+    config.logger
+  end
 end
 ```
 
