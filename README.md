@@ -228,13 +228,13 @@ Algumas informações podem ser configuradas para uso da gem:
 ```ruby
 VagasCommons.configure do |config|
   # Indicar para uso do logger por outro meio de saída
-  config.logger = Logger.new(STDOUT)
+  config.logger = default: Logger.new($stdout)
 
   # Indicar qual o agent de requisições HTTP padrão
-  config.request.user_agent = 'Um novo agent'
+  config.request.user_agent = default: 'Um novo agent'
 
   # Quantidade máxima de requisições HTTP em paralelo
-  config.requests.max_concurrent = 10
+  config.requests.max_concurrent = default: 10
 end
 ```
 
